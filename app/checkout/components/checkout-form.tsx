@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 import { useQueryClient } from "@tanstack/react-query";
 import useCheckout from "@/api/checkout/use-checkout";
-import { useToast } from "@/components/ui/use-toast";
 
 const checkoutSchema = z.object({
   email: z.string().email(),
@@ -43,8 +42,6 @@ export default function CheckoutForm() {
 
   const { mutateAsync: checkout } = useCheckout();
 
-  const { toast } = useToast();
-
   const onSubmit = async (values: CHECKOUT) => {
     const items = queryClient.getQueryData(["products"]) as Product[];
     const order = {
@@ -68,28 +65,16 @@ export default function CheckoutForm() {
       expirationDate: values.expirationDate,
       cvc: values.cvc,
     };
-    await checkout(
-      {
+
+    try {
+      await checkout({
         order,
         customer,
         paymentMethod,
-      },
-      {
-        onSuccess: (data) => {
-          return toast({
-            title: `${data.success}`,
-          });
-        },
-        onError: (data) => {
-          console.log({data});
-          return toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: `${data.error}`,
-          });
-        },
-      }
-    );
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

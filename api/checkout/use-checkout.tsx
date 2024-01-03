@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
 import { client } from "../common/client";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
+import { useToast } from "@/components/ui/use-toast";
 
 export interface Root {
   order: Order;
@@ -33,23 +34,29 @@ export interface PaymentMethod {
   cvc: string;
 }
 
-const checkout = async (bodyData: Root): Promise<{ success: string }> => {
-  try {
-    const { data } = (await client.post(
-      "/checkout",
-      bodyData
-    )) as AxiosResponse<{
-      success: string;
-    }>;
-    return data;
-  } catch (error) {
-    return error.response.data;
-
-  }
+const checkout = async (bodyData: Root): Promise<any> => {
+  const { data } = (await client.post("/checkout", bodyData)) as AxiosResponse<{
+    success: string;
+  }>;
+  return data;
 };
 
 export default function useCheckout() {
+  const { toast } = useToast();
   return useMutation({
     mutationFn: (data: Root) => checkout(data),
+    onSuccess: (data) => {
+      toast({
+        title: `${data.success}`,
+      });
+    },
+    onError: (error: AxiosError<{ error: string }>) => {
+      const message = error.response?.data.error || error.message;
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: `${message}`,
+      });
+    },
   });
 }

@@ -18,7 +18,7 @@ interface ItemProps {
 export default function Item({
   product: { name, color, price, quantity, image, id },
   onQuantityClick,
-  onDeleteItem
+  onDeleteItem,
 }: ItemProps) {
   return (
     <div className="flex py-6">

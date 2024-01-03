@@ -107,7 +107,7 @@ export function PaymentMethods({ form }: paymentProps) {
                     .replace(/[^\d]/g, "")
                     .split("")
                     .map((e: string, i: number) =>
-                      i && i % 4 === 0 ? ` ${e}` : e
+                      i && i % 4 === 0 ? ` ${e}` : e,
                     )
                     .join("");
                 }}
@@ -137,7 +137,7 @@ export function PaymentMethods({ form }: paymentProps) {
                       .replace(/[^\d]/g, "")
                       .split("")
                       .map((e: string, i: number) =>
-                        i && i % 2 === 0 ? `/${e}` : e
+                        i && i % 2 === 0 ? `/${e}` : e,
                       )
                       .join("");
                   }}

@@ -9,7 +9,7 @@ export async function POST(request: Request) {
   if (error)
     return NextResponse.json(
       { error: "you need at least one product!" },
-      { status: 400 }
+      { status: 400 },
     );
 
   const success = "Your payment has been succeeded";

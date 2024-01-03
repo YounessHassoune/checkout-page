@@ -18,7 +18,7 @@ export interface Product {
 export function ProductList() {
   const { data, isLoading } = useProducts();
   const [selectedProduct, setSelectedProduct] = React.useState<Product | null>(
-    null
+    null,
   );
   const [open, setOpen] = React.useState(false);
 
@@ -31,13 +31,13 @@ export function ProductList() {
       quantity,
     };
     queryClient.setQueryData(["products"], (old: Product[]) =>
-      old.map((p) => (p.id === selectedProduct.id ? newProduct : p))
+      old.map((p) => (p.id === selectedProduct.id ? newProduct : p)),
     );
     setSelectedProduct(newProduct);
   };
   const removeItem = (id: string) => {
     queryClient.setQueryData(["products"], (old: Product[]) =>
-      old.filter((p) => p.id !== id)
+      old.filter((p) => p.id !== id),
     );
   };
 
